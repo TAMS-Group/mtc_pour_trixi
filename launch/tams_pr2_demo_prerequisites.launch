@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find tams_pr2_moveit_config)/launch/demo.launch"/>
+  <param name="move_group/constraint_approximations_path" value="$(find mtc_pour_trixi)/cadb"/>
+</launch>
