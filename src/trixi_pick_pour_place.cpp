@@ -20,6 +20,10 @@
 #include <moveit/task_constructor/solvers/cartesian_path.h>
 #include <moveit/task_constructor/solvers/pipeline_planner.h>
 
+#include <actionlib/client/simple_action_client.h>
+#include <moveit_task_constructor_msgs/ExecuteTaskSolutionAction.h>
+
+
 #include "utils.hpp"
 
 #include <memory>
@@ -307,19 +311,30 @@ int main(int argc, char** argv){
 
 	t.enableIntrospection();
 
-	//ros::NodeHandle nh("~");
-	//bool execute= nh.param<bool>("execute", false);
-
 	ROS_INFO_STREAM( t );
 
 	try {
-		t.plan(10);
+		t.plan(2);
 
 		std::cout << "waiting for <enter>" << std::endl;
 		std::cin.get();
 	}
 	catch(InitStageException& e){
 		ROS_ERROR_STREAM(e);
+	}
+
+	if(t.numSolutions() > 0){
+		ROS_INFO("executing first solution");
+
+		actionlib::SimpleActionClient<moveit_task_constructor_msgs::ExecuteTaskSolutionAction> ac("execute_task_solution", true);
+		ac.waitForServer();
+
+		moveit_task_constructor_msgs::ExecuteTaskSolutionGoal goal;
+		t.solutions().front()->fillMessage(goal.task_solution);
+		ac.sendGoal(goal);
+		ac.waitForResult();
+
+		ROS_INFO_STREAM("action returned: " << ac.getState().toString());
 	}
 
 	return 0;

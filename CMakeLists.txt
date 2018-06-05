@@ -4,6 +4,7 @@ project(mtc_pour_trixi)
 add_compile_options(-std=c++14)
 
 find_package(catkin REQUIRED COMPONENTS
+	actionlib
 	moveit_ros_planning_interface
 	moveit_task_constructor_core
 	moveit_task_constructor_msgs
