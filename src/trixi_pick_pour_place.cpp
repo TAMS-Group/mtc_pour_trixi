@@ -37,7 +37,7 @@ int main(int argc, char** argv){
 	spinner.start();
 
 	{
-		const double table_height= .55;
+		const double table_height= .7;
 
 		geometry_msgs::PoseStamped bottle;
 		bottle.header.frame_id= "base_link";
@@ -141,10 +141,10 @@ int main(int argc, char** argv){
 		stage->setMonitoredStage(current_state);
 
 		auto wrapper = std::make_unique<stages::ComputeIK>("grasp pose", std::move(stage) );
-		wrapper->setMaxIKSolutions(1);
+		wrapper->setMaxIKSolutions(3);
 		wrapper->setTimeout(0.05);
 		wrapper->setIgnoreCollisions(true);
-		wrapper->setIKFrame("l_gripper_tool_frame");
+		wrapper->setIKFrame(Eigen::Translation3d(0.0,0.0,0.06), "l_gripper_tool_frame");
 		wrapper->properties().configureInitFrom(Stage::PARENT, {"eef"});
 		t.add(std::move(wrapper));
 	}
@@ -198,7 +198,7 @@ int main(int argc, char** argv){
 		geometry_msgs::PoseStamped p;
 		p.header.frame_id= "glass";
 		p.pose.orientation= tf::createQuaternionMsgFromRollPitchYaw(0,0,0/*-M_PI/4*/);
-		p.pose.position.z= .19;
+		p.pose.position.z= .30;
 		stage->setPose(p);
 		stage->properties().configureInitFrom(Stage::PARENT);
 
@@ -215,7 +215,7 @@ int main(int argc, char** argv){
 		auto stage = std::make_unique<mtc_pour::PourInto>("pouring");
 		stage->setBottle("bottle");
 		stage->setContainer("glass");
-		stage->setPourOffset(Eigen::Vector3d(0,0.015,0.035));
+		stage->setPourOffset(Eigen::Vector3d(0,0.018,0.050));
 		stage->setTiltAngle(2.0);
 		stage->setPourDuration(ros::Duration(2.0));
 		stage->properties().configureInitFrom(Stage::PARENT);
@@ -252,7 +252,7 @@ int main(int argc, char** argv){
 		p.header.frame_id= "table";
 		p.pose.position.x=  0.1;
 		p.pose.position.y=  0.3;
-		p.pose.position.z=  0.20; // 0.14
+		p.pose.position.z=  0.12; // 0.14
 		p.pose.orientation.w= 1;
 		stage->setPose(p);
 		stage->properties().configureInitFrom(Stage::PARENT);

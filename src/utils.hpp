@@ -19,7 +19,8 @@ void collisionObjectFromResource(moveit_msgs::CollisionObject& msg, const std::s
 	msg.meshes.resize(1);
 
 	// load mesh
-	const Eigen::Vector3d scaling(1, 1, 1);
+	Eigen::Vector3d scaling(1, 1, 1);
+	if(id == "bottle") scaling= Eigen::Vector3d(1,1,1.4);
 	shapes::Shape* shape = shapes::createMeshFromResource(resource, scaling);
 	shapes::ShapeMsg shape_msg;
 	shapes::constructMsgFromShape(shape, shape_msg);
@@ -110,6 +111,9 @@ void setupObjects(
 		objects.back().mesh_poses[0]= glass_pose.pose;
 		// The input pose is interpreted as a point *on* the table
 		objects.back().mesh_poses[0].position.z+= computeMeshHeight(objects.back().meshes[0])/2 + .002;
+		// brutally adjust glass size
+		objects.back().mesh_poses[0].position.z-= .03;
+
 	}
 
 	psi.applyCollisionObjects(objects);
