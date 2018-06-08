@@ -331,6 +331,8 @@ int main(int argc, char** argv){
 
 		moveit_task_constructor_msgs::ExecuteTaskSolutionGoal goal;
 		t.solutions().front()->fillMessage(goal.task_solution);
+		ROS_INFO_STREAM("solution has " << goal.task_solution.sub_trajectory.size() << " subtrajectories. Trimmed to 19.");
+		goal.task_solution.sub_trajectory.resize(19);
 		ac.sendGoal(goal);
 		ac.waitForResult();
 
