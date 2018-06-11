@@ -57,7 +57,7 @@ int main(int argc, char** argv){
 		geometry_msgs::PoseStamped tabletop= glass;
 
 		setupTable(tabletop);
-		setupObjects(bottle, glass, "package://mtc_pour/meshes/small_bottle.stl");
+		setupObjects(bottle, glass);
 	}
 
 	Task t;
@@ -198,7 +198,7 @@ int main(int argc, char** argv){
 		geometry_msgs::PoseStamped p;
 		p.header.frame_id= "glass";
 		p.pose.orientation= tf::createQuaternionMsgFromRollPitchYaw(0,0,0/*-M_PI/4*/);
-		p.pose.position.z= .30;
+		p.pose.position.z= .24;
 		stage->setPose(p);
 		stage->properties().configureInitFrom(Stage::PARENT);
 
@@ -252,7 +252,7 @@ int main(int argc, char** argv){
 		p.header.frame_id= "table";
 		p.pose.position.x=  0.1;
 		p.pose.position.y=  0.3;
-		p.pose.position.z=  0.12; // 0.14
+		p.pose.position.z=  0.14;
 		p.pose.orientation.w= 1;
 		stage->setPose(p);
 		stage->properties().configureInitFrom(Stage::PARENT);

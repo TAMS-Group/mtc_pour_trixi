@@ -20,7 +20,6 @@ void collisionObjectFromResource(moveit_msgs::CollisionObject& msg, const std::s
 
 	// load mesh
 	Eigen::Vector3d scaling(1, 1, 1);
-	if(id == "bottle") scaling= Eigen::Vector3d(1,1,1.4);
 	shapes::Shape* shape = shapes::createMeshFromResource(resource, scaling);
 	shapes::ShapeMsg shape_msg;
 	shapes::constructMsgFromShape(shape, shape_msg);
