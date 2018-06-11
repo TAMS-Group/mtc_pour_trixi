@@ -194,6 +194,7 @@ int main(int argc, char** argv){
 	}
 
 	{
+		// TODO: add attached objects as markers to debug marker
 		auto stage = std::make_unique<stages::GeneratePose>("pose above glass");
 		geometry_msgs::PoseStamped p;
 		p.header.frame_id= "glass";
