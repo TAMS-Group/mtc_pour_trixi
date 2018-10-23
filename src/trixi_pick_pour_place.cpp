@@ -127,14 +127,14 @@ int main(int argc, char** argv){
 		geometry_msgs::Vector3Stamped vec;
 		vec.header.frame_id = "l_gripper_tool_frame";
 		vec.vector.x = 1.0;
-		stage->along(vec);
+		stage->setDirection(vec);
 		t.add(std::move(stage));
 	}
 
 	{
 		auto stage = std::make_unique<stages::GenerateGraspPose>("grasp work space pose");
 		stage->properties().configureInitFrom(Stage::PARENT);
-		stage->setNamedPose("open");
+		stage->setPreGraspPose("open");
 		stage->setObject("bottle");
 		stage->setAngleDelta(M_PI/16);
 
@@ -146,6 +146,7 @@ int main(int argc, char** argv){
 		wrapper->setIgnoreCollisions(true);
 		wrapper->setIKFrame(Eigen::Translation3d(0.0,0.0,0.06), "l_gripper_tool_frame");
 		wrapper->properties().configureInitFrom(Stage::PARENT, {"eef"});
+		wrapper->properties().configureInitFrom(Stage::INTERFACE, {"target_pose"});
 		t.add(std::move(wrapper));
 	}
 
@@ -181,7 +182,7 @@ int main(int argc, char** argv){
 		geometry_msgs::Vector3Stamped vec;
 		vec.header.frame_id= "base_footprint";
 		vec.vector.z= 1.0;
-		stage->along(vec);
+		stage->setDirection(vec);
 		t.add(std::move(stage));
 	}
 
@@ -209,6 +210,7 @@ int main(int argc, char** argv){
 		wrapper->setMaxIKSolutions(8);
 		wrapper->setIKFrame("l_gripper_tool_frame");
 		wrapper->properties().configureInitFrom(Stage::PARENT, {"eef"});
+		wrapper->properties().configureInitFrom(Stage::INTERFACE, {"target_pose"});
 		t.add(std::move(wrapper));
 	}
 
@@ -243,7 +245,7 @@ int main(int argc, char** argv){
 		geometry_msgs::Vector3Stamped vec;
 		vec.header.frame_id = "l_gripper_tool_frame";
 		vec.vector.z = -1.0;
-		stage->along(vec);
+		stage->setDirection(vec);
 		t.add(std::move(stage));
 	}
 
@@ -264,6 +266,7 @@ int main(int argc, char** argv){
 		wrapper->setMaxIKSolutions(8);
 		wrapper->setIKFrame("l_gripper_tool_frame");
 		wrapper->properties().configureInitFrom(Stage::PARENT, {"eef"});
+		wrapper->properties().configureInitFrom(Stage::INTERFACE, {"target_pose"});
 		t.add(std::move(wrapper));
 	}
 
@@ -299,7 +302,7 @@ int main(int argc, char** argv){
 		vec.header.frame_id= "l_gripper_tool_frame";
 		vec.vector.x=  -1.0;
 		vec.vector.z= 0.75;
-		stage->along(vec);
+		stage->setDirection(vec);
 		t.add(std::move(stage));
 	}
 
@@ -331,9 +334,9 @@ int main(int argc, char** argv){
 		ac.waitForServer();
 
 		moveit_task_constructor_msgs::ExecuteTaskSolutionGoal goal;
-		t.solutions().front()->fillMessage(goal.task_solution);
-		ROS_INFO_STREAM("solution has " << goal.task_solution.sub_trajectory.size() << " subtrajectories. Trimmed to 19.");
-		goal.task_solution.sub_trajectory.resize(19);
+		t.solutions().front()->fillMessage(goal.solution);
+		ROS_INFO_STREAM("solution has " << goal.solution.sub_trajectory.size() << " subtrajectories. Trimmed to 19.");
+		goal.solution.sub_trajectory.resize(19);
 		ac.sendGoal(goal);
 		ac.waitForResult();
 
