@@ -219,6 +219,12 @@ int main(int argc, char** argv){
 		stage->setBottle("bottle");
 		stage->setContainer("glass");
 		stage->setPourOffset(Eigen::Vector3d(0,0.018,0.050));
+		{
+			geometry_msgs::Vector3Stamped pouring_axis;
+			pouring_axis.header.frame_id= "base_footprint";
+			pouring_axis.vector.x=1.0;
+			stage->setPouringAxis(pouring_axis);
+		}
 		stage->setTiltAngle(2.0);
 		stage->setPourDuration(ros::Duration(2.0));
 		stage->properties().configureInitFrom(Stage::PARENT);
