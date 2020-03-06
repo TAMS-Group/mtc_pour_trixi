@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
 	moveit_task_constructor_msgs
 	mtc_pour
 	roscpp
+	tf
 	)
 
 catkin_package()

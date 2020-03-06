@@ -23,6 +23,7 @@
 #include <actionlib/client/simple_action_client.h>
 #include <moveit_task_constructor_msgs/ExecuteTaskSolutionAction.h>
 
+#include <tf/transform_datatypes.h>
 
 #include "utils.hpp"
 
