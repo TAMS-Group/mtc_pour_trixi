@@ -202,7 +202,7 @@ int main(int argc, char** argv){
 	{
 		auto stage = std::make_unique<stages::Connect>("move to pre-pour pose", stages::Connect::GroupPlannerVector{{"left_arm", constraint_sampling_planner}});
 		stage->setTimeout(5.0);
-		stage->setPathConstraints(upright_constraint);
+//		stage->setPathConstraints(upright_constraint);
 		stage->properties().configureInitFrom(Stage::PARENT);
 		t.add(std::move(stage));
 	}
