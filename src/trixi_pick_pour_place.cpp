@@ -2,6 +2,8 @@
 
 #include <moveit/robot_model/robot_model.h>
 
+#include <moveit/move_group_interface/move_group_interface.h>
+
 #include <moveit/task_constructor/task.h>
 
 #include <moveit/task_constructor/stages/current_state.h>
@@ -31,6 +33,15 @@
 
 using namespace moveit::task_constructor;
 
+void setupRobot(){
+	moveit::planning_interface::MoveGroupInterface mgi("left_arm");
+	mgi.setNamedTarget("left_arm_to_side");
+	while(!bool(mgi.move())){
+		ROS_ERROR("could not move arm away to prepare scene");
+		ros::Duration(0.5).sleep();
+	}
+}
+
 int main(int argc, char** argv){
 	ros::init(argc, argv, "mtc_pouring");
 
@@ -57,6 +68,7 @@ int main(int argc, char** argv){
 		// center of table surface can be the glass pose
 		geometry_msgs::PoseStamped tabletop= glass;
 
+		setupRobot();
 		setupTable(tabletop);
 		setupObjects(bottle, glass);
 	}
