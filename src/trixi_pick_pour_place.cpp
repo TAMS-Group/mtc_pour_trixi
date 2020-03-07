@@ -337,7 +337,7 @@ int main(int argc, char** argv){
 	ROS_INFO_STREAM( t );
 
 	try {
-		t.plan(2);
+		t.plan(1);
 
 		std::cout << "waiting for <enter>" << std::endl;
 		std::cin.get();
@@ -354,8 +354,6 @@ int main(int argc, char** argv){
 
 		moveit_task_constructor_msgs::ExecuteTaskSolutionGoal goal;
 		t.solutions().front()->fillMessage(goal.solution);
-		ROS_INFO_STREAM("solution has " << goal.solution.sub_trajectory.size() << " subtrajectories. Trimmed to 19.");
-		goal.solution.sub_trajectory.resize(19);
 		ac.sendGoal(goal);
 		ac.waitForResult();
 
